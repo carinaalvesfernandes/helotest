@@ -4,9 +4,7 @@ export interface NamedResource {
 }
 
 export interface PokemonGeneration {
-    id: number;
-    pokemon_species: NamedResource[];
-    types: NamedResource[];
+    results: NamedResource[]
 }
 
 export interface Pokemon {

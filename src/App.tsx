@@ -15,13 +15,12 @@ export const indexRoute = createRoute({
     path: "/",
     component: App,
     loader: ({ context: { queryClient } }) =>
-        queryClient.ensureQueryData(allPokemonsQueryOptions),
+        queryClient.ensureQueryData(allPokemonsQueryOptions()),
 });
 
 function App() {
-    const { data: allPokemons } = useQuery(allPokemonsQueryOptions);
+    const { data: pokemons } = useQuery(allPokemonsQueryOptions(0));
     const navigate = useNavigate();
-
     return (
         <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Box
@@ -31,7 +30,7 @@ function App() {
                     maxWidth: "800px",
                     gap: 1,
                 }}>
-                {allPokemons?.pokemon_species.map(pokemon => (
+                {pokemons?.map(pokemon => (
                     <Card key={pokemon.name} sx={{ maxWidth: 200 }}>
                         <CardActionArea
                             onClick={() =>
