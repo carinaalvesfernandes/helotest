@@ -1,39 +1,52 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import "./App.css";
-import { useFetchAllPokemonGen1, useFetchPokemon } from "./hooks/pokemon";
+import {
+    Box,
+    Card,
+    CardActionArea,
+    CardContent,
+    Typography,
+} from "@mui/material";
+import { allPokemonsQueryOptions } from "./hooks/pokemon";
+import { createRoute, useNavigate } from "@tanstack/react-router";
+import { rootRoute } from ".";
+import { useQuery } from "@tanstack/react-query";
+
+export const indexRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/",
+    component: App,
+    loader: ({ context: { queryClient } }) =>
+        queryClient.ensureQueryData(allPokemonsQueryOptions),
+});
 
 function App() {
-    //const { data } = useFetchPokemon(1);
-    const { data: allPokemons } = useFetchAllPokemonGen1();
+    const { data: allPokemons } = useQuery(allPokemonsQueryOptions);
+    const navigate = useNavigate();
 
     return (
-        <div className='App'>
-            <Typography variant='h1' component='h2'>
-                Pokemon
-            </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        maxWidth: "800px",
-                        gap: 1,
-                    }}>
-                    {allPokemons?.map(pokemon => (
-                        <Card sx={{ maxWidth: 200 }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    maxWidth: "800px",
+                    gap: 1,
+                }}>
+                {allPokemons?.pokemon_species.map(pokemon => (
+                    <Card key={pokemon.name} sx={{ maxWidth: 200 }}>
+                        <CardActionArea
+                            onClick={() =>
+                                navigate({ to: `/${pokemon.name}` })
+                            }>
                             <CardContent>
-                                <Typography
-                                    gutterBottom
-                                    variant='h6'
-                                    component='div'>
+                                <Typography variant='h6' component='div'>
                                     {pokemon.name}
                                 </Typography>
                             </CardContent>
-                        </Card>
-                    ))}
-                </Box>
+                        </CardActionArea>
+                    </Card>
+                ))}
             </Box>
-        </div>
+        </Box>
     );
 }
 

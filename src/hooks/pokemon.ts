@@ -1,28 +1,20 @@
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { PokemonClient, GameClient } from "pokenode-ts"; // Import the Client
+import { queryOptions } from "@tanstack/react-query";
+import { Pokemon, PokemonGeneration } from "../types";
 
-const gameApi = new GameClient();
-const pokemonApi = new PokemonClient();
+const fetchPokemon = async (id: string): Promise<Pokemon> =>
+    (await axios(`https://pokeapi.co/api/v2/pokemon/${id}`)).data;
 
-const fetchPokemon = async (name: string) => pokemonApi.getPokemonByName(name);
+const fetchAllPokemonsGen1 = async (): Promise<PokemonGeneration> =>
+    (await axios(`https://pokeapi.co/api/v2/generation/1`)).data;
 
-const fetchAllPokemonsGen1 = async () => gameApi.getGenerationById(1);
-
-// const fetchAllPokemonsGen1 = async () =>
-//     (await axios(`https://pokeapi.co/api/v2/generation/1`)).data;
-
-export const useFetchPokemon = (pokemonName: string) =>
-    useQuery({
-        queryKey: ["pokemons", pokemonName],
-        queryFn: () => fetchPokemon(pokemonName),
+export const pokemonQueryOptions = (pokemonId: string) =>
+    queryOptions({
+        queryKey: ["pokemons", pokemonId],
+        queryFn: () => fetchPokemon(pokemonId),
     });
 
-export const useFetchAllPokemonGen1 = () =>
-    useQuery({
-        queryKey: ["pokemons"],
-        queryFn: fetchAllPokemonsGen1,
-        select: data => {
-            return data.pokemon_species;
-        },
-    });
+export const allPokemonsQueryOptions = queryOptions({
+    queryKey: ["pokemons"],
+    queryFn: fetchAllPokemonsGen1,
+});

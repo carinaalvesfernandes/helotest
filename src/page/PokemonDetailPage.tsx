@@ -10,12 +10,22 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import { useFetchPokemon } from "../hooks/pokemon";
-import { useParams } from "react-router-dom";
+import { pokemonQueryOptions } from "../hooks/pokemon";
+import { createRoute } from "@tanstack/react-router";
+import { rootRoute } from "..";
+import { useQuery } from "@tanstack/react-query";
+
+export const pokemonDetailsRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/$pokemon",
+    component: PokemonDetailPage,
+    loader: ({ context: { queryClient }, params: { pokemon }  }) =>
+        queryClient.ensureQueryData(pokemonQueryOptions(pokemon)),
+});
 
 function PokemonDetailPage() {
-    const params = useParams();
-    const { data: pokemon, isError } = useFetchPokemon(params.pokemon || "");
+    const params = pokemonDetailsRoute.useParams();
+    const { data: pokemon, isError } = useQuery(pokemonQueryOptions(params.pokemon || ""));
 
     if (isError) {
         return (
@@ -28,7 +38,7 @@ function PokemonDetailPage() {
     }
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: "20vh" }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
             {pokemon && (
                 <Card sx={{ width: "500px" }}>
                     <CardContent>
@@ -56,7 +66,7 @@ function PokemonDetailPage() {
                             </Box>
                         </Box>
 
-                        <Box sx={{ display: "flex", gap: 2 }}>
+                        <Box sx={{ display: "flex", gap: 8 }}>
                             <Table size='small' sx={{ width: "50%" }}>
                                 <TableHead>
                                     <TableRow>
