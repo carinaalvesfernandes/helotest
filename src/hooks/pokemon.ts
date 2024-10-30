@@ -5,8 +5,8 @@ import { Pokemon, PokemonGeneration } from "../types";
 const fetchPokemon = async (id: string): Promise<Pokemon> =>
     (await axios(`https://pokeapi.co/api/v2/pokemon/${id}`)).data;
 
-const fetchAllPokemonsGen1 = async (offset:number, limit: number = 20): Promise<PokemonGeneration> =>
-    (await axios(`https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=${offset}`)).data;
+const fetchAllPokemonsGen1 = async (offset:number): Promise<PokemonGeneration> =>
+    (await axios(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`)).data;
 
 export const pokemonQueryOptions = (pokemonId: string) =>
     queryOptions({
@@ -15,7 +15,7 @@ export const pokemonQueryOptions = (pokemonId: string) =>
     });
 
 export const allPokemonsQueryOptions =  (offset: number = 0) => queryOptions({
-    queryKey: ["pokemons"],
+    queryKey: ["pokemons", offset],
     queryFn: ()=> fetchAllPokemonsGen1(offset),
-    select: (data) => data.results
+
 });

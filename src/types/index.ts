@@ -4,7 +4,8 @@ export interface NamedResource {
 }
 
 export interface PokemonGeneration {
-    results: NamedResource[]
+    results: NamedResource[],
+    count: number
 }
 
 export interface Pokemon {
@@ -19,11 +20,11 @@ export interface Pokemon {
     types: PokemonType[];
 }
 
-interface PokemonMove {
+export interface PokemonMove {
     move: NamedResource;
 }
 
-interface PokemonStat {
+export interface PokemonStat {
     stat: NamedResource;
     effort: number;
     base_stat: number;

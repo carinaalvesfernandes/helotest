@@ -1,8 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
-function ErrorPage() {
+type ErrorPageProps = {
+    errormessage?: string;
+};
+
+const ErrorPage = ({ errormessage = "Page not found" }: ErrorPageProps) => {
     return (
-        <Box sx={{ mt: "25vh" }}>
+        <>
             <Typography variant='h1' component='h2' align='center' gutterBottom>
                 Opps!
             </Typography>
@@ -11,10 +15,10 @@ function ErrorPage() {
                 component='p'
                 align='center'
                 gutterBottom>
-                Page not found
+                {errormessage}
             </Typography>
-        </Box>
+        </>
     );
-}
+};
 
 export default ErrorPage;

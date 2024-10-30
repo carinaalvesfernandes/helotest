@@ -2,47 +2,17 @@ import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ErrorPage from "./page/ErrorPage";
-import { indexRoute } from "./App";
-import { pokemonDetailsRoute } from "./page/PokemonDetailPage";
+import { pokemonOverviewRoute } from "./routes/PokemonOverview";
+import { pokemonDetailsRoute } from "./routes/PokemonDetailPage";
 import {
-    createRootRouteWithContext,
     createRouter,
-    Link,
-    Outlet,
     RouterProvider,
 } from "@tanstack/react-router";
-import { Box } from "@mui/material";
-import logo from "./assets/logo.png";
+import { rootRoute } from "./routes/Root";
 
-export const rootRoute = createRootRouteWithContext<{
-    queryClient: QueryClient;
-}>()({
-    component: () => (
-        <>
-            <Link to='/'>
-                <Box
-                    component='img'
-                    sx={{
-                        width: "100%",
-                        maxWidth: 400,
-                        display: "block",
-                        m: "0 auto",
-                        mt: "5vh",
-                        mb: 8,
-                    }}
-                    alt='Pokemon Logo'
-                    src={logo}
-                />
-            </Link>
-            <Outlet />
-        </>
-    ),
-    notFoundComponent: ErrorPage,
-});
 
 const routeTree = rootRoute.addChildren({
-    indexRoute,
+    pokemonOverviewRoute,
     pokemonDetailsRoute,
 });
 
